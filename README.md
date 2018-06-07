@@ -1,5 +1,5 @@
 # SHMM
-"[A Spherical Hidden Markov Model for Semantics-Rich Human Mobility Modeling](http://chaozhang.org/files/papers/aaai18b.pdf)" AAAI2018 Paper
+"[A Spherical Hidden Markov Model for Semantics-Rich Human Mobility Modeling](http://chaozhang.org/files/papers/aaai18b.pdf)" AAAI2018 Paper 
 
 ## CODE:
 All code are in the folder '*./code*'.
