@@ -1,0 +1,103 @@
+file:
+  dir: &DIR ../../data/tf-ny/
+  raw:
+    dir: &RAW_DIR !join [*DIR, raw/]
+    checkins: !join [*RAW_DIR, checkins.txt]
+    places: !join [*RAW_DIR, places.txt]
+    stopwords: !join [*RAW_DIR, stopwords.txt]
+  input:
+    dir: &IN_DIR !join [*DIR, input/]
+    sequences: !join [*IN_DIR, sequences.txt]
+    words: !join [*IN_DIR, words.txt]
+    sentencevec: !join [*IN_DIR, final.txt]
+
+
+hmm:
+  maxIter: 50
+  # for the hmm model
+  numState: [15]
+  #numState: [10, 15, 20, 30, 40, 50, 70, 100]
+  numComponent: 1
+  evalNumState: yes
+
+
+predict:
+  info_option: [1,11,21]
+  #info_option: [1,2,3,4,5,6,7,8]
+  #info_option: [11,12,13,14,16,17,18]
+  testRatio: 0.3
+  distThre: 2.0
+  timeThre: 300.0
+  K: [1,2,3,4,5]
+  # added by Keyang
+  avgTest: no
+  filterTest: yes # if set to yes, test set will only retain the seqs of the user with at least 1 training seqs
+
+
+
+mongo:
+  write: no
+  dns: dmserv4.cs.illinois.edu
+  port: 11111
+  db: ny9m
+  raw: raw
+  sequences: hmm_seqs_tf
+  words: hmm_words_tf
+  models: hmm_models_tf
+  exps: hmm_exp_tf
+
+
+preprocess:
+  source: notdb
+  startTime: 2014-08-01 00:00:00
+  endTime: 2014-11-30 23:59:59
+  minGap: 60
+  maxGap: 240
+
+
+# added by Keyang
+augment:
+  # number of bins for the longitude and latitude axis
+  numAxisBin: [10, 15, 20]
+  augmentTrain: yes
+  augmentTest: yes
+  augmentedSize: [100, 75, 50, 25, 0]
+  threshold: [0.3, 0.5, 0.2, 0.1, 0.05, 0.01] # similarity threshold
+  evalThresh: yes
+  evalSize: yes
+  evalNumBin: no
+
+
+# added by Keyang
+ehmm:
+  numCluster: [10,2,4,6,8,12,14,16,18,20]
+  initMethod: [random]
+  evalNumCluster: yes
+  evalInitMethod: no
+
+post:
+  box:
+    xmax: -73.7
+    xmin: -74.3
+    ymax: 40.5
+    ymin: 40.95
+    xcenter: -74.006
+    ycenter: 40.71
+  keyword:
+    K: 20
+    dir: &OUT_DIR !join [*DIR, output/]
+    hmm_description: !join [*OUT_DIR, hmm.txt]
+  plot:
+    dir: &DRAW_DIR !join [*DIR, output/]
+    places: !join [*DRAW_DIR, places.pdf]
+    hmm_geo: !join [*DRAW_DIR, hmm.pdf]
+    hmm_state: !join [*DRAW_DIR, hmm_state.pdf]
+    background: !join [*DRAW_DIR, background.html]
+    C: !join [*DRAW_DIR, C.pdf]
+    K: !join [*DRAW_DIR, K.pdf]
+    L: !join [*DRAW_DIR, L.pdf]
+    delta: !join [*DRAW_DIR, delta.pdf]
+    all: !join [*DRAW_DIR, accuracy.pdf]
+    time_C: !join [*DRAW_DIR, time_C.pdf]
+    time_K: !join [*DRAW_DIR, time_K.pdf]
+

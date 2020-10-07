@@ -1,0 +1,95 @@
+file:
+  dir: &DIR ../../data/tf-la/
+  raw:
+    dir: &RAW_DIR !join [*DIR, raw/]
+  input:
+    dir: &IN_DIR !join [*DIR, input/]
+    synthetic_sequences: !join [*DIR, ../../data/Synthetic/synthetic_data.txt]
+    para: !join [*DIR, ../../data/Synthetic/data_para.txt]
+
+
+hmm:
+  maxIter: 10
+  numComponent: 1
+  evalNumState: yes
+
+
+predict:
+  info_option: [30,31]
+  testRatio: 0.3
+  distThre: 3.5
+  timeThre: 300.0
+  K: [1,2,3,4,5]
+  avgTest: no
+  filterTest: yes # if set to yes, test set will only retain the seqs of the user with at least 1 training seqs
+
+
+mongo:
+  write: no
+  dns: dmserv4.cs.illinois.edu
+  port: 11111
+  db: tweet-la
+  raw: raw
+  sequences: hmm_seqs_tf
+  words: hmm_words_tf
+  models: hmm_models_tf
+  exps: hmm_exp_tf
+
+
+preprocess:
+  source: notdb
+  startTime: 2014-08-01 00:00:00
+  endTime: 2014-11-30 23:59:59
+  minGap: 60
+  maxGap: 240
+
+
+# added by Keyang
+augment:
+  # number of bins for the longitude and latitude axis
+  numAxisBin: [10, 15, 20]
+  augmentTrain: yes
+  augmentTest: yes
+  augmentedSize: [40, 20, 10, 60, 80, 100, 0]
+  threshold: [0.2, 0.1, 0.3, 0.4, 0.5, 0] # similarity threshold
+  evalThresh: yes
+  evalSize: yes
+  evalNumBin: no
+
+
+# added by Keyang
+ehmm:
+  #numCluster: [20,20,30,40,50,60,70,90,100]
+  numCluster: [10]
+  initMethod: [random]
+  evalNumCluster: yes
+  evalInitMethod: no
+
+
+post:
+  box:
+    xmax: -118.15
+    xmin: -118.67
+    ymax: 34.4
+    ymin: 33.7
+    xcenter: -118.25
+    ycenter: 34.05
+  keyword:
+    K: 20
+    dir: &OUT_DIR !join [*DIR, output/]
+    hmm_description: !join [*OUT_DIR, hmm.txt]
+    augmentation: !join [*OUT_DIR, augment.txt]
+  plot:
+    dir: &DRAW_DIR !join [*DIR, output/]
+    places: !join [*DRAW_DIR, places.pdf]
+    hmm_geo: !join [*DRAW_DIR, hmm.pdf]
+    hmm_state: !join [*DRAW_DIR, hmm_state.pdf]
+    background: !join [*DRAW_DIR, background.html]
+    C: !join [*DRAW_DIR, C.pdf]
+    K: !join [*DRAW_DIR, K.pdf]
+    L: !join [*DRAW_DIR, L.pdf]
+    delta: !join [*DRAW_DIR, delta.pdf]
+    all: !join [*DRAW_DIR, accuracy.pdf]
+    time_C: !join [*DRAW_DIR, time_C.pdf]
+    time_K: !join [*DRAW_DIR, time_K.pdf]
+

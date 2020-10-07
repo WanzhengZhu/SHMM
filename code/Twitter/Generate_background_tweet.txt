@@ -1,0 +1,16 @@
+1. Generate background_tweet.txt: 
+1.1 run preprocess.py to get background tweets (uncomment line 34: self.write_background_tweet(); Keep an eye on line 9 of the function write_background_tweet: need to specify i[6] for raw message; comment line 196-197 to make no tweet skip).
+1.2 run myread.cpp to get only raw tweets information (Change line 32: if(counter % 6 != 0) to if(counter % 6 == 0))
+1.3 run runTagger.sh to tokenize raw tweets (This step takes about 30mins)
+1.4 run reconstruct.cpp to reconstruct the tweet. The results is background_tweet.txt.
+
+2. Generate background_tweet_BOW.txt: 
+run preprocess.py to get background tweets (uncomment line 34: self.write_background_tweet(); Keep an eye on line 9 of the function write_background_tweet: need to specify i[5] for BOW message; comment line 196-197 to make no tweet skip).
+
+************************************** 
+## Carefully change the following file&code according to the instructions above.
+(cd $(dirname "$0")/../code/pre-post-process/ && python ./preprocess.py '../run/tf-la.yaml' '/Users/wanzheng/Downloads/AAAI 2018/data/la-tweets.txt')
+$cp/myread $dp/LA_background_tweet.txt $dp/geo.txt $dp/tweet.txt
+java -XX:ParallelGCThreads=2 -Xmx500m -jar $(dirname $0)/ark-tweet-nlp-0.3.2.jar "$@" --output-format conll $dp/tweet.txt > $dp/tokenized_tweet.txt
+$cp/reconstruct $dp/tokenized_tweet.txt $dp/LA_background_tweet.txt
+**************************************
