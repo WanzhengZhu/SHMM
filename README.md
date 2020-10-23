@@ -15,7 +15,7 @@ Under the hidden Markov assumption, SHMM models the generation process of a give
 
 An example model output is shown below: 
 
-<p align="center"><img width="95%" src="example.pdf"/></p>
+<p align="center"><img width="95%" src="example.png"/></p>
 
 
 ## Code
